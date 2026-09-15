@@ -1,0 +1,11 @@
+# Deny direct access to SMTP secrets and rate-limit data
+<FilesMatch "^(config\.smtp\.php|rate_limit\.json)$">
+  Require all denied
+</FilesMatch>
+# Apache 2.2 fallback
+<IfModule !mod_authz_core.c>
+  <FilesMatch "^(config\.smtp\.php|rate_limit\.json)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>

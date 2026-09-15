@@ -1,0 +1,31 @@
+# Campus APP ERP — Apache clean URLs
+DirectoryIndex index.html
+
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+
+# Force HTTPS when available (uncomment on production if desired)
+# RewriteCond %{HTTPS} !=on
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect old root *.html (except index) to clean paths
+RewriteRule ^index\.html$ / [L,R=301]
+RewriteRule ^(features|modules|about|contact|login|pricing|students|fees|attendance|notices)\.html$ /$1 [L,R=301]
+RewriteRule ^demo-dashboard\.html$ /demo-dashboard [L,R=301]
+
+# Redirect legacy pages/*.html paths
+RewriteRule ^pages/(features|modules|about|contact|login|pricing|students|fees|attendance|notices)\.html$ /$1 [L,R=301]
+RewriteRule ^pages/demo-dashboard\.html$ /demo-dashboard [L,R=301]
+RewriteRule ^pages/index\.html$ / [L,R=301]
+
+# Optional: /demo → /demo-dashboard
+RewriteRule ^demo/?$ /demo-dashboard [L,R=301]
+
+# Serve directory index for extensionless URLs if needed
+# (Apache DirectoryIndex already serves /features/ as features/index.html)
+# Also allow /features without trailing slash via MultiViews or rewrite:
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+RewriteRule ^([A-Za-z0-9_-]+)/?$ /$1/index.html [L]
